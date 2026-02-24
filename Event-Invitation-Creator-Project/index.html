@@ -1,1 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Invitation Creator</title>
+    <style>
+        body{
+            height:100vh;
+            width:100vw;
+            margin:0px;
+            padding:0px;
+            background:linear-gradient(#2c3e50,#3498db);
+            color:#333;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+        .form-container{
+            display:block;
+            display:flex;
+            flex-direction:column;
+            justify-content:space-evenly;
+            align-items:center;
+            background-color:white;
+            border-radius:20px;
+            height:80%;
+            width:50%;
+            padding:0 4%;
+            box-shadow:1px 1px 3px 3px lightgray;
+            box-sizing:border-box;
+        }
+        .form-container > h1{
+            color:#0d47a1;
+            font-weight:bold;
+        }
+        form{
+            display:flex;
+            flex-direction:column;
+            justify-content:space-evenly;
+            
+            width:100%;
+            
 
+        }
+        
+        input,textarea{
+            background-color:#f3f4f6 ;
+            border:solid #3498db;
+            border-radius:4px;
+            display:inline-block;
+            align-self:stretch;
+            
+        }
+        input:focus,input:active,textarea:focus,textarea:active{
+            border:solid #ff5722;
+            outline:none;
+        }
+        .button{
+            background-color:#ff6b00;
+            border-radius:10px;
+            color:white;
+            border:0px;
+            padding:3%;
+        }
+        .button:hover{
+            color:#ff6b00;
+            background-color:white;
+            border:solid #ff6b00;
+            
+        }
+        #dialog-box{
+            background:linear-gradient(to right,#2c3e50,#3498db);
+            color:white;
+            position: absolute;
+            width: 30%;
+            margin: auto;
+            text-align: center;
+            border-radius:10px;
+            border:solid white;
+            
+        }
+        #dialog-button{
+            padding:2%;
+            background-color:white;
+            border:0px;
+            border-radius:5px;
+            color:#0d47a1;
+        }
+        #dialog-button:hover{
+            border:solid white;
+            background-color:#0d47a1;
+            color:white;
+        }
+
+        .invite{
+            background-color:white;
+            padding:3%;
+            width:50%;
+            height:60%;
+            display:none;
+            border:5px solid #e74c3c;
+            border-radius:20px;
+            color:black;
+        }
+        .head{
+            width:100%;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+        }
+        .desc{
+            width:100%;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:flex-start;
+
+
+        }
+        .head h2{
+            color:#e74c3c;
+        }
+        .head p{
+            color:rgba(0,0,0,0.7);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Create an Event Invite</h1>
+        <form>
+        <label for="event-name">Event Name:</label>
+        <input type="text" id="event-name" placeholder="kerala JS meetup"/>
+        <br>
+        <label for="event-date">Event Date:</label>
+        <input id="event-date" type="date"/>
+        <br>
+        <label for="start-time">Start time:</label>
+        <input type="time" id="start-time"/>
+        <br>
+        <label for="end-time">End Time:</label>
+        <input type="time" id="end-time"/>
+        <br>
+        <label for="event-description">Event Description:</label>
+        <textarea id="event-description" placeholder="Brief description of the event"></textarea>
+        <br>
+        <label for="location">Location:</label>
+        <input type="text" id="location" placeholder="Location of the event"/>
+        <br>
+        <input type="button" class='button' value="Create Event"/>
+        <br>
+        </form>
+    </div>
+    <dialog id="dialog-box">
+        <h3>All fileds are required</h3>
+        <button id="dialog-button">Dismiss</button>
+    </dialog>
+    <div class="invite">
+        <div class="head">
+            <h2>YOU ARE INVITED</h2>
+            <p>TO JOIN THE</p>
+        </div>
+        <div class="desc"></div>
+
+
+    </div>
+
+
+  
+</body>
+<script>
+    document.querySelector(".button").addEventListener("click",()=>{
+        if(document.querySelector("#event-name").value && document.querySelector("#event-date").value && document.querySelector("#start-time").value && document.querySelector("#end-time").value && document.querySelector("#event-description").value && document.querySelector("#location").value){
+            let headh3=document.createElement("h3");
+            headh3.textContent=`${document.querySelector("#event-name").value}`;
+            document.querySelector(".head").appendChild(headh3);
+            const rawDate = document.querySelector("#event-date").value;
+
+            const formattedDate = new Date(rawDate).toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+            });
+
+            let descp=document.createElement("p");
+            descp.textContent=formattedDate;
+            descp.style.color="#e74c3c";
+            descp.style.fontWeight="bold";
+            const startTime = document.querySelector("#start-time").value;
+const endTime = document.querySelector("#end-time").value;
+
+function formatTime(time) {
+  const [hour, minute] = time.split(":");
+  const date = new Date();
+  date.setHours(hour, minute);
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true
+  });
+}
+
+let descpt = document.createElement("p");
+descpt.textContent = `${formatTime(startTime)} - ${formatTime(endTime)}`;
+            let desplo=document.createElement("p");
+            desplo.textContent=`${document.querySelector("#location").value}`;
+            let descpl=document.createElement("p");
+            descpl.textContent=`${document.querySelector("#event-description").value}`;
+            document.querySelector(".desc").appendChild(descp);
+            document.querySelector(".desc").appendChild(descpt);
+            document.querySelector(".desc").appendChild(desplo);
+            document.querySelector(".desc").appendChild(descpl);
+            document.querySelector(".form-container").style.display="none";
+            document.querySelector(".invite").style.display="block";
+            document.body.style.background = "white";
+
+
+        }
+        else{
+            
+            document.querySelector("#dialog-box").show();
+            document.querySelector("#dialog-button").addEventListener("click",()=>{
+                document.querySelector("#dialog-box").close();
+            });
+            
+        }
+    });
+</script>
+</html>
