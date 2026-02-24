@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+    body{
+        margin:0px;
+        padding:0px;
+        width:100vw;
+        height:100vh;
+        background-color: #ff7700;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cpolygon fill='%23cc0000' points='957 450 539 900 1396 900'/%3E%3Cpolygon fill='%23aa0000' points='957 450 872.9 900 1396 900'/%3E%3Cpolygon fill='%23d6002b' points='-60 900 398 662 816 900'/%3E%3Cpolygon fill='%23b10022' points='337 900 398 662 816 900'/%3E%3Cpolygon fill='%23d9004b' points='1203 546 1552 900 876 900'/%3E%3Cpolygon fill='%23b2003d' points='1203 546 1552 900 1162 900'/%3E%3Cpolygon fill='%23d3006c' points='641 695 886 900 367 900'/%3E%3Cpolygon fill='%23ac0057' points='587 900 641 695 886 900'/%3E%3Cpolygon fill='%23c4008c' points='1710 900 1401 632 1096 900'/%3E%3Cpolygon fill='%239e0071' points='1710 900 1401 632 1365 900'/%3E%3Cpolygon fill='%23aa00aa' points='1210 900 971 687 725 900'/%3E%3Cpolygon fill='%23880088' points='943 900 1210 900 971 687'/%3E%3C/svg%3E");
+        background-attachment: fixed;
+        background-size: cover;
+        display:flex;
+        flex-direction:column;
+        justify-content:space-evenly;
+        align-items:center;
+        color:white;
+
+    }
+    .grid{
+        width:50%;
+        height:60vh;
+        background-color:transparent;
+        display:grid;
+        grid-template-columns:1fr 1fr 1fr;
+        grid-template-rows:auto;
+        grid-gap:5%;
+    }
+    .item{
+        background-color:white;
+        border:solid black;
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+
+
+    }
+    .reset{
+        background-color:rgb(47, 143, 47);
+        color:white;
+        border:0px;
+        border-radius:10px;
+        padding:1.5% 2.5%;
+    }
+    .reset:hover{
+        background-color:white;
+        color:rgb(47, 143, 47);;
+        border:solid;
+    }
+    .item h3{
+        font-weight:bold;
+        color:black;
+    }
+    .dialog{
+        width:30%;
+        position:absolute;
+        text-align:center;
+        background-color:rgba(221, 136, 31, 0.7);
+        border-radius:10px;
+        border:0px;
+
+    }
+    .dismiss{
+        padding:2% 3%;
+        color:white;
+        border:solid white;
+        background-color:blue;
+        border-radius:5px;
+    
+    }
+    .dismiss:hover{
+        color:blue;
+        border:solid blue;
+        background-color:white;
+    }
+   
+    </style>
+</head>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <div class="grid">
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    </div>
+    <button class="reset">Reset</button>
+    <dialog class="dialog">
+        <h3 class="result"></h3>
+        <button class="dismiss">Dismiss</button>
+    </dialog>
+    <script>
+let t = 0;
+const dialog = document.querySelector(".dialog");
+const result = document.querySelector(".result");
+const cells = document.querySelectorAll(".item");
+
+const winPatterns = [
+  [0,1,2],[3,4,5],[6,7,8], 
+  [0,3,6],[1,4,7],[2,5,8], 
+  [0,4,8],[2,4,6]          
+];
+
+document.querySelector(".grid").addEventListener("click", (e) => {
+
+  if (!e.target.classList.contains("item")) return;
+  if (e.target.innerHTML !== "") return;
+
+  let icon = t % 2 === 0 ? "X" : "O";
+  e.target.innerHTML = `<h3>${icon}</h3>`;
+  t++;
+
+  checkWinner();
+});
+
+function checkWinner(){
+  const values = Array.from(cells).map(c => c.textContent);
+
+  for (let i of winPatterns){
+    let a=i[0];
+    let b=i[1];
+    let c=i[2];
+    if(values[a] && values[a] === values[b] && values[b] === values[c]){
+      result.innerText = `${values[a]} Wins!`;
+      dialog.show();
+      return;
+    }
+  }
+
+  if(!values.includes("")){
+    result.innerText = "Tie!";
+    dialog.show();
+  }
+}
+
+document.querySelector(".dismiss").addEventListener("click", () => {
+  dialog.close();
+});
+
+document.querySelector(".reset").addEventListener("click", () => {
+  cells.forEach(c => c.innerHTML = "");
+  t = 0;
+});
+</script>
+    
+</body>
+
+</html>
