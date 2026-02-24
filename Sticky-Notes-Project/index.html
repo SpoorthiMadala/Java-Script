@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Notes</title>
+    <style>
+        body{
+            margin:0;
+            padding:0;
+            height:100vh;
+            width:100vw;
+            display:flex;
+            font-family:"Arial",serif;
+            justify-content:center;
+            align-items:center;
+
+        }
+        .container{
+            background-color:#f1f1f1;
+            box-shadow:1px 1px 3px 3px lightgray;
+            border-radius:10px;
+            width:80%;
+            height:90%;
+            margin :0 auto;
+            display:flex;
+            flex-direction:column;
+            justify-content:space-evenly;
+            align-items:center;
+            padding:0 4%;
+            overflow-y:scroll;
+            
+        }
+        .container > h1{
+            color:#333;
+            font-family:'DM Serif', cursive;
+        }
+        .add-section{
+            background-color:#fefec0;
+            height:15%;
+            border-radius:6px;
+            position:relative;
+            padding:1%;
+
+        }
+        .task:nth-child(n){
+            background-color:#d1e1ff;
+        }
+        .task:nth-child(2n){
+            background-color:#fefffe;
+        }
+        #add{
+            background-color:#11ff00;
+            position:absolute;
+            bottom:3%;
+            right:3%;
+            border:0px;
+            border-radius:3%;
+         
+
+        }
+        #add:hover{
+            transform:scale(1.5,1.5);
+            
+
+        }
+        .tasks{
+            display:grid;
+            width:100%;
+            grid-template-columns:1fr 1fr 1fr;
+            row-gap:30%;
+            column-gap:6%;
+            padding:4%;
+            box-sizing:border-box;
+        }
+        .task{
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:flex-start;
+        
+        }
+        #textarea{
+            background-color:transparent;
+            border:none;
+            resize:none;
+        }
+        .remove:hover {
+            transform: scale(1.5);
+            outline: none;
+        }
+        
+    </style>
+</head>
+<body>
+<div class="container">
+   <h1>Sticky Notes</h1>
+   <div class="tasks">
+   </div>
+   <div class="add-section">
+   <textarea id="textarea" placeholder="Type a new note...."></textarea> 
+   <button id="add">+</button>
+   </div>
+   
+   
+</div>
+<script>
+    document.querySelector("#add").addEventListener("click",()=>{
+        let div=document.createElement("div");
+        div.style.position="relative";
+        div.classList.add("task");
+        let p=document.createElement("p");
+        let button=document.createElement("button")
+        button.textContent="X";
+        button.classList.add("remove");
+        button.style.backgroundColor="#e54b3a";
+        button.style.borderRadius="3px";
+        button.style.position="absolute";
+        button.style.top="10%";
+        button.style.right="6%";
+        button.style.color="white";
+        button.style.border="0px";
+        
+        
+        div.appendChild(button);
+        
+        p.textContent=document.querySelector("#textarea").value;
+        div.appendChild(p);
+        document.querySelector(".tasks").appendChild(div);
+        div.style.padding="5%";
+        div.style.borderRadius="10px";
+
+
+    
+        
+
+         
+    });
+    let tas=Array.from(document.querySelectorAll(".tasks"));
+    for(let i of tas){
+        i.addEventListener("click",(event)=>{
+        if(event.target.classList.contains("remove")){
+        event.target.parentElement.remove();}
+
+    })};
+
+</script>
+</body>
+</html>
