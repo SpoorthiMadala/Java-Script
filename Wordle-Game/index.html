@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Game</title>
+    <style>
+        body{
+            background:#f4f4f4;
+            font-family:"Arial",serif;
+            padding:0px;
+            display:flex;
+            justify-content:center;
+            align-items:flex-start;
+            margin:0px;
+            width:100vw;
+            height:100vh;
+            overflow-y:scroll;
+        }
+        .container{
+            margin-top:3%;
+            background-color:white;
+            border:0px;
+            border-radius:8px;
+            width:60%;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            padding:3% 5%;
+        }
+        .grid{
+            display:grid;
+            grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+            row-gap:2%;
+            column-gap:2%;
+            width:40%;
+            padding-bottom:10%;
+           
+            
+           
+            
+        }
+        .grid div{
+            
+            aspect-ratio: 1 / 1;
+            border:1px solid black;
+            border-radius:3px;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            
+        }
+        .inputcon{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            
+        }
+        #input{
+            padding:5% 10%;
+            margin-right:3%;
+            outline:none;
+            border-radius:3px;
+            
+        }
+        #submit{
+            padding:5% 10%;
+            border-radius:3px;
+            font-weight:bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h1>Wordle Game</h1>
+    <div class="grid">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        
+        <div></div>
+    </div>
+    <div class="inputcon">
+    <input id='input' type="text" maxlength="5" autofocus/>
+    <input id='submit' type="button" value="Submit Guess"/>
+    </div>
+    </div>
+    <script>
+const words = [
+  "apple","brave","chair","dance","eagle",
+  "flame","grape","heart","ideal","joker",
+  "knife","light","magic","night","ocean",
+  "piano","queen","river","stone","table",
+  "union","vivid","waste","xenon","youth",
+  "zebra","amber","blaze","crane","dwarf",
+  "elite","frost","giant","haste","ivory",
+  "jolly","karma","lemon","mango","noble",
+  "orbit","pride","quick","rough","smile",
+  "trust","urban","vapor","whale","zesty"
+];
+
+const gridCells = document.querySelectorAll(".grid div");
+const input = document.querySelector("#input");
+const submitBtn = document.querySelector("#submit");
+
+let totalChances = 6;
+let usedChances = 0;
+let targetWord = words[Math.floor(Math.random() * words.length)];
+
+
+
+submitBtn.addEventListener("click", handleGuess);
+
+function handleGuess() {
+  const guess = input.value.toLowerCase();
+
+  
+
+  if (usedChances >= totalChances) return;
+
+  const startIndex = usedChances * 5;
+
+  for (let i = 0; i < 5; i++) {
+    const cell = gridCells[startIndex + i];
+    cell.textContent = guess[i].toUpperCase();
+
+    if (guess[i] === targetWord[i]) {
+      cell.style.backgroundColor = "green";
+      cell.style.color = "white";
+    } else if (targetWord.includes(guess[i])) {
+      cell.style.backgroundColor = "gold";
+      cell.style.color = "black";
+    } else {
+      cell.style.backgroundColor = "gray";
+      cell.style.color = "white";
+    }
+  }
+
+  usedChances++;
+  input.value = "";
+
+  checkGameState(guess);
+}
+
+function checkGameState(guess) {
+  if (guess === targetWord) {
+    showMessage("Congratulations! You guessed the word!");
+    endGame();
+  } else if (usedChances === totalChances) {
+    showMessage(`Game over, the word was "${targetWord.toUpperCase()}"`);
+    endGame();
+  }
+}
+
+function showMessage(msg) {
+  
+    p = document.createElement("p");
+    p.id = "message";
+    p.style.fontWeight = "bold";
+    p.style.marginTop = "20px";
+    document.querySelector(".container").appendChild(p);
+  
+    p.textContent = msg;
+}
+
+function endGame() {
+  input.disabled = true;
+  submitBtn.disabled = true;
+}    
+    
+
+
+    
+    
+
+
+    </script>
+</body>
+</html>
