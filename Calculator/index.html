@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator</title>
+
+<style>
+
+body{
+font-family:Helvetica;
+background:#ecf0f1;
+color:#2d2d2d;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+width:100vw;
+margin:0;
+padding:0;
+}
+
+.calculator{
+background:snow;
+padding:2%;
+border-radius:15px;
+box-shadow:0 8px 20px 3px rgba(0,0,0,0.2);
+width:30%;
+}
+
+.display{
+width:100%;
+height:12%;
+border:1px solid #aaa;
+margin-bottom:6%;
+font-size:30px;
+text-align:right;
+padding:2%;
+box-sizing:border-box;
+border-radius:4px;
+}
+
+.buttons{
+display:flex;
+justify-content:center;
+align-items:center;
+display:grid;
+grid-template-columns:repeat(5,17%);
+grid-gap:4%;
+row-gap:6%;
+padding-bottom:8%;
+}
+
+button{
+padding:25%;
+font-size:20px;
+border:none;
+border-radius:10px;
+box-shadow:0 3px 6px 3px rgba(0,0,0,0.2);
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+button:active{
+transform:scale(0.95);
+}
+
+.num{
+background:lightgray;
+}
+
+.op{
+background:palevioletred;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+
+<input class="display" value="0" readonly>
+
+<div class="buttons">
+
+<button class="num">1</button>
+<button class="num">2</button>
+<button class="num">3</button>
+<button class="op">C</button>
+<button class="op">%</button>
+
+<button class="num">4</button>
+<button class="num">5</button>
+<button class="num">6</button>
+<button class="op">+</button>
+<button class="op">-</button>
+
+<button class="num">7</button>
+<button class="num">8</button>
+<button class="num">9</button>
+<button class="op">÷</button>
+<button class="op">x</button>
+
+<button class="num">.</button>
+<button class="num">0</button>
+<button class="num">=</button>
+<button class="op">Del</button>
+<button class="op">Exp</button>
+
+</div>
+
+</div>
+
+<script>
+const display = document.querySelector(".display");
+
+let expression = "";
+
+document.querySelectorAll("button").forEach(btn => {
+
+btn.addEventListener("click", () => {
+
+const val = btn.textContent;
+
+if(!isNaN(val) || val === "."){
+
+if(display.value === "0"){display.value = "";}
+
+expression += val;
+display.value = expression;
+
+}
+
+else if(["+","-","x","÷","%"].includes(val)){
+
+expression += val;
+display.value = expression;
+
+}
+
+else if(val === "Exp"){
+
+expression += "**";
+display.value += "^";
+
+}
+
+else if(val === "="){
+
+try{
+
+let exp = expression
+.replace(/x/g,"*")
+.replace(/÷/g,"/")
+
+const result = eval(exp)
+
+display.value = result;
+expression = result.toString();
+
+}catch{
+
+display.value = "Error";
+expression = "";
+
+}
+
+}
+
+else if(val === "C"){
+
+expression = "";
+display.value = "0";
+
+}
+
+else if(val === "Del"){
+
+expression = expression.slice(0,-1);
+
+display.value = expression || "0";
+
+}
+
+})
+
+})
+</script>
+
+</body>
+</html>
