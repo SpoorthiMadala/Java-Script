@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>News Explorer</title>
+
+<style>
+
+body{
+font-family:Arial, sans-serif;
+background:#eef1f5;
+margin:0;
+padding:0;
+}
+
+.container{
+width:80%;
+padding:3%;
+margin:auto;
+}
+
+.search{
+width:100%;
+padding:1.5% 2%;
+border-radius:6px;
+border:1px solid #bbb;
+margin-bottom:2%;
+}
+
+h1{
+margin-bottom:2%;
+}
+
+.tags{
+display:flex;
+margin-bottom:2%;
+
+}
+
+.tag{
+padding:1% 2%;
+background:#eee;
+border-radius:4px;
+font-size:14px;
+margin-right:3%;
+}
+
+.tag.active{
+background:black;
+color:white;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:3%;
+}
+
+.card{
+background:#f6f6f6;
+padding:3% 5%;
+border-radius:8px;
+}
+
+.card.large{
+grid-column:span 2;
+}
+
+.date{
+font-size:12px;
+color:#777;
+margin-bottom:2%;
+}
+
+.highlight{
+color:red;
+font-weight:bold;
+}
+
+.showMore{
+margin:9% auto;
+display:block;
+padding:1.5% 3%;
+background:black;
+color:white;
+border:none;
+border-radius:4px;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<input class="search" id="search" placeholder="Search news">
+
+<h1>Top stories for you</h1>
+
+<div class="tags">
+<span class="tag active" data-tag="All">All</span>
+<span class="tag" data-tag="Business">Business</span>
+<span class="tag" data-tag="Politics">Politics</span>
+<span class="tag" data-tag="Sports">Sports</span>
+<span class="tag" data-tag="Entertainment">Entertainment</span>
+</div>
+
+<div class="grid" id="newsGrid"></div>
+
+<button class="showMore" id="showMore">Show More</button>
+
+</div>
+
+<script>
+
+const newsData=[
+{title:"Lorem ipsum dolor sit amet, consectetur adipiscing elit",category:"Business",date:"2024-04-24",text:"Lorem ipsum dolor sit amet consectetur adipiscing elit."},
+{title:"Global sports event begins today",category:"Sports",date:"2024-04-22",text:"Fans gather worldwide for the tournament."},
+{title:"Election campaigns heat up",category:"Politics",date:"2024-04-23",text:"Candidates travel across the country."},
+{title:"Celebrity wins award ceremony",category:"Entertainment",date:"2024-04-21",text:"Stars gather for celebration."},
+{title:"Stock market shows strong growth",category:"Business",date:"2024-04-20",text:"Investors optimistic about future."},
+{title:"New movie breaks records",category:"Entertainment",date:"2024-04-19",text:"Box office collections surge."},
+{title:"Team wins championship",category:"Sports",date:"2024-04-18",text:"Historic victory celebrated."},
+{title:"Government announces reforms",category:"Politics",date:"2024-04-17",text:"New policies introduced."},
+{title:"Tech companies expand market",category:"Business",date:"2024-04-16",text:"Startups receive major funding."}
+]
+const grid = document.getElementById("newsGrid")
+const search = document.getElementById("search")
+const tags = document.querySelectorAll(".tag")
+const showMore = document.getElementById("showMore")
+
+let visible = 7
+let searchTerm = ""
+let selectedTags = ["All"]
+
+const sorted = newsData.sort((a,b)=> new Date(b.date) - new Date(a.date))
+
+function highlight(text,word){
+if(!word) return text
+const regex = new RegExp(word,"gi")
+return text.replace(regex,'<span class="highlight">$&</span>')
+}
+
+function render(){
+
+grid.innerHTML=""
+
+const filtered = sorted.filter(n =>
+
+(selectedTags.includes("All") || selectedTags.includes(n.category)) &&
+n.title.toLowerCase().includes(searchTerm.toLowerCase())
+
+)
+
+filtered.slice(0,visible).forEach((news,i)=>{
+
+const card = document.createElement("div")
+card.className = "card"
+if(i===0) card.classList.add("large")
+
+card.innerHTML = `
+<h3>${highlight(news.title,searchTerm)}</h3>
+<div class="date">${news.date}</div>
+<p>${news.text}</p>
+`
+
+grid.appendChild(card)
+
+})
+
+showMore.style.display = filtered.length > visible ? "block" : "none"
+}
+
+showMore.onclick = () => {
+visible = sorted.length
+render()
+}
+
+function debounce(fn,delay){
+let timer
+return (...args)=>{
+clearTimeout(timer)
+timer=setTimeout(()=>fn(...args),delay)
+}
+}
+
+search.addEventListener("input",debounce(e=>{
+searchTerm = e.target.value
+visible = 7
+render()
+},400))
+
+tags.forEach(tag => {
+
+tag.onclick = () => {
+
+const value = tag.dataset.tag
+
+if(value==="All"){
+selectedTags=["All"]
+tags.forEach(t=>t.classList.remove("active"))
+tag.classList.add("active")
+}
+else{
+
+selectedTags = selectedTags.filter(t=>t!=="All")
+
+if(selectedTags.includes(value)){
+selectedTags = selectedTags.filter(t=>t!==value)
+tag.classList.remove("active")
+}else{
+selectedTags.push(value)
+tag.classList.add("active")
+}
+
+if(selectedTags.length===0){
+selectedTags=["All"]
+document.querySelector('[data-tag="All"]').classList.add("active")
+}
+
+}
+
+visible = 7
+render()
+
+}
+
+})
+
+render()
+
+</script>
+
+</body>
+</html>
